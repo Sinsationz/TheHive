@@ -1,46 +1,33 @@
-// script.js – Waitlist Modal Logic
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WorkerBeeOS – Join the Hive</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🐝 Welcome to WorkerBeeOS</h1>
+    <p>Your career, automated. Be first to join the Hive.</p>
+    <button id="open-waitlist-btn">Join the Waitlist</button>
+  </div>
 
-document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("waitlist-modal");
-  const openBtn = document.getElementById("open-waitlist-btn");
-  const closeBtn = document.getElementById("close-modal");
-  const form = document.getElementById("waitlist-form");
-  const statusText = document.getElementById("form-status");
+  <div id="waitlist-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" id="close-modal">&times;</span>
+      <h2>Join the Waitlist</h2>
+      <form id="waitlist-form">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Your Email" required />
+        <input type="text" id="jobtitle" placeholder="Job Title / Industry" required />
+        <button type="submit">Submit</button>
+      </form>
+      <p id="form-status"></p>
+    </div>
+  </div>
 
-  openBtn.addEventListener("click", () => {
-    modal.classList.remove("hidden");
-    statusText.textContent = "";
-    form.reset();
-  });
+  <script src="assets/script.js"></script>
+</body>
+</html>
 
-  closeBtn.addEventListener("click", () => {
-    modal.classList.add("hidden");
-  });
-
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.add("hidden");
-    }
-  });
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const formData = {
-      name: form.name.value.trim(),
-      email: form.email.value.trim(),
-      jobTitle: form.jobtitle.value.trim(),
-    };
-
-    try {
-      console.log("Submitting...", formData);
-      statusText.textContent = "Submitted! ✅";
-      form.reset();
-    } catch (err) {
-      console.error(err);
-      statusText.textContent = "Submission failed. Try again.";
-    }
-
-    modal.classList.add("hidden");
-  });
-});
