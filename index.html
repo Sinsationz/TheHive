@@ -1,59 +1,33 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WorkerBeeOS 🐝</title>
+  <title>WorkerBeeOS – Join the Hive</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-image: radial-gradient(#f8d568 0.5px, #000 0.5px);
-      background-size: 30px 30px;
-    }
-    .hero {
-      text-align: center;
-      padding: 2rem;
-      border: 2px solid #f8d568;
-      border-radius: 12px;
-    }
-    .hero h1 {
-      font-size: 2rem;
-      color: #f8d568;
-      margin-bottom: 0.5rem;
-    }
-    .subheadline {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-      color: #ccc;
-    }
-    .cta {
-      background-color: #f8d568;
-      color: black;
-      padding: 0.75rem 1.25rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .cta:hover {
-      background-color: #ffe17c;
-    }
-  </style>
 </head>
 <body>
-  <div class="hero">
-    <h1>Welcome to WorkerBeeOS 🐝</h1>
-    <p class="subheadline">The Operating System for Job Seekers</p>
-    <button class="cta" onclick="alert('Waitlist functionality coming soon!')">Join the Waitlist</button>
+  <div class="container">
+    <h1>Welcome to WorkerBeeOS</h1>
+    <p>Your career, automated. Be first to join the Hive.</p>
+    <button id="join-btn">Join the Waitlist</button>
   </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close" id="close-btn">&times;</span>
+      <h2>Join the Waitlist</h2>
+      <form id="waitlist-form">
+        <input type="text" id="name" placeholder="Your Name" required />
+        <input type="email" id="email" placeholder="Your Email" required />
+        <input type="text" id="jobtitle" placeholder="Job Title / Industry" required />
+        <button type="submit">Submit</button>
+      </form>
+      <p id="form-status"></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
