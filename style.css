@@ -1,88 +1,119 @@
-/* style.css – WorkerBeeOS Landing Page */
+/* WorkerBeeOS — Landing Page UI */
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #fffbee;
-  color: #222;
   margin: 0;
   padding: 0;
-  background-image: url("honeycomb.svg");
+  background-color: #0f0f0f;
+  color: #fff;
+  background-image: url('honeycomb.svg'); /* optional background */
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
 }
 
 .container {
   text-align: center;
-  padding: 5rem 2rem;
+  padding: 100px 20px;
 }
 
-.cta-button {
-  padding: 12px 24px;
-  background-color: #f8d568;
-  border: none;
-  border-radius: 6px;
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #f8d568;
+}
+
+p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+button {
+  padding: 12px 28px;
   font-size: 1rem;
   font-weight: bold;
+  color: #0f0f0f;
+  background-color: #f8d568;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: 0.3s ease;
 }
 
-.cta-button:hover {
-  background-color: #e6be3a;
+button:hover {
+  background-color: #ffd000;
 }
 
 /* Modal Overlay */
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
   z-index: 999;
+}
+
+.modal.hidden {
+  display: none;
 }
 
 /* Modal Content */
 .modal-content {
-  background: #fff;
-  padding: 2rem;
+  background-color: #1a1a1a;
+  padding: 30px;
   border-radius: 10px;
-  width: 320px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 10px #f8d568;
+  text-align: left;
+  position: relative;
 }
 
-.modal-content input,
-.modal-content button {
+.modal-content h2 {
+  color: #f8d568;
+  margin-bottom: 20px;
+}
+
+.modal-content input {
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background: #333;
+  color: #fff;
   font-size: 1rem;
 }
 
-.modal-content button {
-  background-color: #f8d568;
-  border: none;
-  font-weight: bold;
+.modal-content input::placeholder {
+  color: #ccc;
+}
+
+.modal-content button[type="submit"] {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Close Button (X) */
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.2rem;
   cursor: pointer;
+  color: #aaa;
 }
 
-.modal-content button:hover {
-  background-color: #e6be3a;
+.close:hover {
+  color: #fff;
 }
 
-.close-button {
-  float: right;
-  font-size: 1.5rem;
-  cursor: pointer;
+/* Submission Status */
+#form-status {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #f8d568;
 }
 
-/* Hidden class */
-.hidden {
-  display: none !important;
-}
