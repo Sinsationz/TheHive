@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Submit form (no real backend yet)
+  // Submit form
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     const name = form.name.value.trim();
@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const jobTitle = form.jobtitle.value.trim();
 
     console.log("Submitted:", { name, email, jobTitle });
-
     status.textContent = "✅ Submitted! We'll be in touch.";
     form.reset();
     modal.classList.add("hidden");
