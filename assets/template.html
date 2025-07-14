@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WorkerBeeOS – Join the Hive</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🐝 WorkerBeeOS</h1>
+        <p>The operating system for modern job seekers.</p>
+      </header>
+
+      <main>
+        <button id="open-waitlist-btn" class="cta-button">
+          Join the Waitlist
+        </button>
+      </main>
+
+      <!-- Modal -->
+      <div id="waitlist-modal" class="modal hidden">
+        <div class="modal-content">
+          <span id="close-modal" class="close-button">&times;</span>
+          <h2>Join the Hive</h2>
+          <form id="waitlist-form">
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              required
+            />
+            <input
+              type="text"
+              name="jobTitle"
+              placeholder="Target Job Title / Industry"
+              required
+            />
+            <select name="status" required>
+              <option value="" disabled selected>
+                Current Job Search Status
+              </option>
+              <option value="unemployed">Unemployed</option>
+              <option value="employed-looking">Employed, but looking</option>
+              <option value="exploring">Just exploring</option>
+            </select>
+            <button type="submit">Submit</button>
+          </form>
+          <div id="confirmation" class="hidden">
+            <p>✅ You're on the list! We'll reach out soon. 🐝</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
