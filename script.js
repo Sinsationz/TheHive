@@ -1,43 +1,38 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("waitlist-modal");
-  const openModalBtn = document.getElementById("open-waitlist-btn");
-  const closeModalBtn = document.getElementById("close-modal");
+  const openBtn = document.getElementById("open-waitlist-btn");
+  const closeBtn = document.getElementById("close-modal");
   const form = document.getElementById("waitlist-form");
-  const confirmation = document.getElementById("confirmation");
+  const status = document.getElementById("form-status");
 
-  openModalBtn.addEventListener("click", () => {
+  // Open modal
+  openBtn.addEventListener("click", () => {
     modal.classList.remove("hidden");
-    confirmation.classList.add("hidden");
-    form.reset();
   });
 
-  closeModalBtn.addEventListener("click", () => {
+  // Close modal
+  closeBtn.addEventListener("click", () => {
     modal.classList.add("hidden");
   });
 
-  window.addEventListener("click", (event) => {
-    if (event.target === modal) {
+  // Click outside modal closes it
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
       modal.classList.add("hidden");
     }
   });
 
-  form.addEventListener("submit", async (e) => {
+  // Submit form (no real backend yet)
+  form.addEventListener("submit", (e) => {
     e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const jobTitle = form.jobtitle.value.trim();
 
-    const formData = {
-      name: form.name.value.trim(),
-      email: form.email.value.trim(),
-      jobTitle: form.jobTitle.value.trim(),
-      status: form.status.value,
-    };
+    console.log("Submitted:", { name, email, jobTitle });
 
-    try {
-      // Placeholder: replace with actual endpoint (e.g., Airtable or API)
-      console.log("Submitting:", formData);
-      confirmation.classList.remove("hidden");
-      form.classList.add("hidden");
-    } catch (error) {
-      alert("Submission failed. Please try again.");
-    }
+    status.textContent = "✅ Submitted! We'll be in touch.";
+    form.reset();
+    modal.classList.add("hidden");
   });
 });
