@@ -1,109 +1,88 @@
-/* style.css - WorkerBeeOS Landing Page */
+/* style.css – WorkerBeeOS Landing Page */
 
 body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fffbee;
+  color: #222;
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #000;
-  color: #fff;
-  background-image: url('ghost-honeycomb.png');
+  background-image: url("honeycomb.svg");
   background-size: cover;
-  background-repeat: no-repeat;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
-header {
+.container {
   text-align: center;
-  padding: 60px 20px 40px;
-}
-
-h1 {
-  font-size: 48px;
-  color: #f8d568;
-  margin-bottom: 10px;
-}
-
-p {
-  font-size: 20px;
-  color: #ccc;
+  padding: 5rem 2rem;
 }
 
 .cta-button {
+  padding: 12px 24px;
   background-color: #f8d568;
-  color: #000;
-  padding: 14px 32px;
   border: none;
-  border-radius: 8px;
-  font-size: 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  margin-top: 30px;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease;
 }
 
 .cta-button:hover {
-  background-color: #e6c056;
+  background-color: #e6be3a;
 }
 
-/* Modal Styles */
+/* Modal Overlay */
 .modal {
-  display: none;
   position: fixed;
-  z-index: 999;
-  left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.9);
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 }
 
+/* Modal Content */
 .modal-content {
-  background-color: #111;
-  margin: 10% auto;
-  padding: 30px;
-  border: 1px solid #f8d568;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 500px;
-  color: #fff;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 320px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
-input[type="text"],
-input[type="email"] {
+.modal-content input,
+.modal-content button {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
+  padding: 10px;
+  margin-top: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
-.submit-button {
+.modal-content button {
   background-color: #f8d568;
-  color: #000;
   border: none;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  width: 100%;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.submit-button:hover {
-  background-color: #e6c056;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
   font-weight: bold;
   cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
-  color: #fff;
+.modal-content button:hover {
+  background-color: #e6be3a;
 }
 
+.close-button {
+  float: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Hidden class */
+.hidden {
+  display: none !important;
+}
