@@ -1,0 +1,259 @@
+from playwright.sync_api import sync_playwright
+import time
+import os
+import json
+from datetime import datetime
+
+EMAIL = "ogren.brandon@outlook.com"
+PHONE = "+19492895455"
+RESUME_PATH = r"C:\\Users\\brandon.ogren\\Desktop\\WorkerBee\\Resources\\Brandon_Ogren_Resume.pdf"
+
+PREFERENCES = {
+    "experience": "14",
+    "years of experience": "14",
+    "industry": "SaaS, Cybersecurity, Sales",
+}
+
+SKIP_KEYWORDS = [
+    "1099", "life insurance", "insurance", "finance",
+    "merchant services", "commission only", "agency", "mortgage", "gibbons group",
+    "financial", "real estate"
+]
+
+SEARCH_KEYWORDS_LIST = [
+    "sales executive costa mesa",
+    "sales executive newport beach",
+    "sales executive remote"
+]
+
+MAX_JOBS_TO_GRAB_PER_SEARCH = 5
+MAX_TOTAL_DAILY_APPLICATIONS = 50
+PROCESSED_JOBS_FILE = "processed_jobs.json"
+
+def load_processed_jobs():
+    if os.path.exists(PROCESSED_JOBS_FILE):
+        with open(PROCESSED_JOBS_FILE, 'r') as f:
+            return json.load(f)
+    return {}
+
+def save_processed_jobs(data):
+    with open(PROCESSED_JOBS_FILE, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def should_skip_job(page):
+    try:
+        job_title = page.title().lower()
+    except:
+        job_title = ""
+    try:
+        job_desc = ""
+        if page.locator('.description__text').count():
+            job_desc = page.locator('.description__text').inner_text().lower()
+        elif page.locator('.show-more-less-html__markup').count():
+            job_desc = page.locator('.show-more-less-html__markup').inner_text().lower()
+    except:
+        job_desc = ""
+    combined = job_title + " " + job_desc
+    return any(keyword in combined for keyword in SKIP_KEYWORDS)
+
+def fill_contact_info(page):
+    try:
+        email_input = page.locator('input[type="email"]')
+        if email_input.count() > 0:
+            email_input.first.fill(EMAIL)
+        phone_input = page.locator('input[type="tel"]')
+        if phone_input.count() > 0:
+            phone_input.first.fill(PHONE)
+    except Exception as e:
+        print(f"Error filling contact info: {e}")
+
+def upload_resume(page):
+    try:
+        resume_input = page.locator('input[type="file"]')
+        if resume_input.count() > 0 and os.path.exists(RESUME_PATH):
+            resume_input.set_input_files(RESUME_PATH)
+    except Exception as e:
+        print(f"Error uploading resume: {e}")
+
+def auto_fill_preferences(page):
+    try:
+        selects = page.locator('select')
+        for i in range(selects.count()):
+            select = selects.nth(i)
+            label = select.evaluate("el => el.parentElement?.innerText || ''").lower()
+            for key, answer in PREFERENCES.items():
+                if key in label:
+                    options = select.locator('option')
+                    for j in range(options.count()):
+                        option = options.nth(j)
+                        option_text = option.inner_text().lower()
+                        if answer.lower() in option_text:
+                            select.select_option(value=option.get_attribute('value'))
+                            break
+        inputs = page.locator('input[type="text"], input[type="number"]')
+        for i in range(inputs.count()):
+            inp = inputs.nth(i)
+            label = inp.evaluate("el => el.parentElement?.innerText || ''").lower()
+            for key, answer in PREFERENCES.items():
+                if key in label:
+                    inp.fill(str(answer))
+        textareas = page.locator('textarea')
+        for i in range(textareas.count()):
+            textarea = textareas.nth(i)
+            label = textarea.evaluate("el => el.parentElement?.innerText || ''").lower()
+            for key, answer in PREFERENCES.items():
+                if key in label:
+                    textarea.fill(str(answer))
+    except Exception as e:
+        print(f"Error auto-filling preferences: {e}")
+
+def has_unanswered_required(page):
+    required_inputs = page.locator('input[required], textarea[required], select[required]')
+    for i in range(required_inputs.count()):
+        el = required_inputs.nth(i)
+        value = el.input_value() if el.evaluate("el => el.type !== undefined") else el.evaluate("el => el.value")
+        if not value or value.strip() == "":
+            return True
+    return False
+
+def click_next_or_submit(page):
+    for label in ["Next", "Review", "Submit application"]:
+        btn = page.locator(f'button:has-text("{label}")')
+        if btn.count() > 0 and btn.first.is_enabled():
+            btn.first.click()
+            time.sleep(2)
+            return label
+    return None
+
+def scroll_and_collect_job_links(page, num_jobs):
+    job_links = set()
+    page_num = 1
+    while len(job_links) < num_jobs:
+        for _ in range(10):
+            page.mouse.wheel(0, 5000)
+            time.sleep(1)
+        anchors = page.locator('a')
+        for a in anchors.all():
+            href = a.get_attribute('href')
+            if href and '/jobs/view/' in href:
+                job_links.add("https://www.linkedin.com" + href)
+            if len(job_links) >= num_jobs:
+                break
+        next_btn = page.locator('button[aria-label*="Next"], button:has-text("Next"), li[data-test-pagination-page-btn] button')
+        if next_btn.count() > 0 and next_btn.first.is_enabled():
+            next_btn.first.click()
+            page_num += 1
+            time.sleep(10)
+        else:
+            break
+    return list(job_links)
+
+def main():
+    processed_jobs = load_processed_jobs()
+    today = datetime.today().strftime('%Y-%m-%d')
+    if today not in processed_jobs:
+        processed_jobs[today] = []
+
+    with sync_playwright() as p:
+        user_data_dir = os.path.expanduser("~/.pw-linkedin-profile")
+        browser = p.chromium.launch_persistent_context(user_data_dir=user_data_dir, headless=False)
+        page = browser.new_page()
+
+        page.goto("https://www.linkedin.com/jobs/")
+        time.sleep(12)
+        input("\n🔐 Log in to LinkedIn in the browser window if needed, then press Enter here to start automation...")
+
+        applied_total = 0
+
+        while applied_total < MAX_TOTAL_DAILY_APPLICATIONS:
+            for SEARCH_KEYWORDS in SEARCH_KEYWORDS_LIST:
+                print(f"\n--- Starting search for: {SEARCH_KEYWORDS} ---")
+                search_url = f"https://www.linkedin.com/jobs/search/?keywords={SEARCH_KEYWORDS.replace(' ', '%20')}&f_AL=true"
+                page.goto(search_url)
+                time.sleep(6)
+
+                job_links = scroll_and_collect_job_links(page, MAX_JOBS_TO_GRAB_PER_SEARCH)
+                job_links = [url for url in job_links if url not in processed_jobs[today]]
+
+                if not job_links:
+                    print(f"Collected 0 new job links for {SEARCH_KEYWORDS}. Moving on.")
+                    continue
+
+                applied = 0
+                skipped = 0
+
+                for idx, job_url in enumerate(job_links):
+                    if applied_total >= MAX_TOTAL_DAILY_APPLICATIONS:
+                        break
+
+                    try:
+                        page.goto(job_url)
+                        time.sleep(8)
+
+                        if should_skip_job(page):
+                            skipped += 1
+                            processed_jobs[today].append(job_url)
+                            continue
+
+                        easy_apply = page.locator('button:has-text("Easy Apply")')
+                        if easy_apply.count() == 0:
+                            skipped += 1
+                            processed_jobs[today].append(job_url)
+                            continue
+
+                        easy_apply_handle = easy_apply.first.element_handle()
+                        if easy_apply_handle:
+                            page.evaluate("(el) => el.scrollIntoView()", easy_apply_handle)
+                            time.sleep(1)
+                            try:
+                                easy_apply_handle.click()
+                            except:
+                                page.evaluate("(el) => el.click()", easy_apply_handle)
+                        else:
+                            skipped += 1
+                            processed_jobs[today].append(job_url)
+                            continue
+
+                        time.sleep(3)
+                        if not page.locator('form').count():
+                            skipped += 1
+                            processed_jobs[today].append(job_url)
+                            continue
+
+                        fill_contact_info(page)
+                        upload_resume(page)
+                        auto_fill_preferences(page)
+
+                        for _ in range(10):
+                            auto_fill_preferences(page)
+                            if has_unanswered_required(page):
+                                skipped += 1
+                                processed_jobs[today].append(job_url)
+                                break
+                            btn_clicked = click_next_or_submit(page)
+                            if btn_clicked == "Submit application":
+                                applied += 1
+                                applied_total += 1
+                                processed_jobs[today].append(job_url)
+                                break
+                            elif btn_clicked is None:
+                                break
+                            time.sleep(2)
+
+                    except Exception as e:
+                        print(f"Error: {e}")
+                        skipped += 1
+                        processed_jobs[today].append(job_url)
+                        continue
+
+                print(f"\nDone with '{SEARCH_KEYWORDS}': Applied to {applied} jobs, skipped {skipped}.")
+
+                if applied_total >= MAX_TOTAL_DAILY_APPLICATIONS:
+                    break
+
+        save_processed_jobs(processed_jobs)
+        input("\nPress Enter to close browser...")
+        browser.close()
+
+if __name__ == "__main__":
+    main()
