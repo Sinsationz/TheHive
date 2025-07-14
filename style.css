@@ -1,119 +1,102 @@
-/* WorkerBeeOS — Landing Page UI */
+/* style.css – WorkerBeeOS Landing Page UI */
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #0f0f0f;
+  background-color: #0a0a0a;
   color: #fff;
-  background-image: url('honeycomb.svg'); /* optional background */
-  background-size: cover;
-  background-position: center;
 }
 
 .container {
   text-align: center;
-  padding: 100px 20px;
+  margin-top: 100px;
 }
 
 h1 {
   font-size: 2.5rem;
-  margin-bottom: 10px;
-  color: #f8d568;
 }
 
 p {
-  font-size: 1.1rem;
-  margin-bottom: 30px;
+  font-size: 1.2rem;
+  color: #ccc;
 }
 
 button {
-  padding: 12px 28px;
+  padding: 10px 20px;
   font-size: 1rem;
-  font-weight: bold;
-  color: #0f0f0f;
   background-color: #f8d568;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
-  background-color: #ffd000;
+  background-color: #e6bf3b;
 }
 
-/* Modal Overlay */
+/* Modal Background */
 .modal {
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  z-index: 999;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
 }
 
-.modal.hidden {
+/* Hide modal by default */
+.hidden {
   display: none;
 }
 
-/* Modal Content */
+/* Modal Content Box */
 .modal-content {
-  background-color: #1a1a1a;
+  background-color: #1c1c1c;
   padding: 30px;
   border-radius: 10px;
   width: 90%;
-  max-width: 400px;
-  box-shadow: 0 0 10px #f8d568;
+  max-width: 500px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
   text-align: left;
-  position: relative;
 }
 
 .modal-content h2 {
+  margin-top: 0;
   color: #f8d568;
-  margin-bottom: 20px;
 }
 
 .modal-content input {
+  display: block;
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 5px;
-  background: #333;
-  color: #fff;
+  padding: 10px;
+  margin: 12px 0;
   font-size: 1rem;
-}
-
-.modal-content input::placeholder {
-  color: #ccc;
+  border: 1px solid #444;
+  border-radius: 5px;
+  background-color: #2a2a2a;
+  color: #fff;
 }
 
 .modal-content button[type="submit"] {
-  width: 100%;
+  background-color: #f8d568;
+  color: #000;
+  font-weight: bold;
   margin-top: 10px;
 }
 
-/* Close Button (X) */
+.modal-content button[type="submit"]:hover {
+  background-color: #e6bf3b;
+}
+
 .close {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 1.2rem;
+  float: right;
+  font-size: 1.5rem;
   cursor: pointer;
-  color: #aaa;
-}
-
-.close:hover {
-  color: #fff;
-}
-
-/* Submission Status */
-#form-status {
-  margin-top: 15px;
-  font-size: 0.9rem;
   color: #f8d568;
 }
-
